@@ -56,6 +56,14 @@ class BT{
         cout<<root->data<<endl;
         showTreeInorder(root->right);
     }
+    void pathSum(Node* root, int target){
+        if(root==NULL)return false;
+        if(root->val==targetSum and !root->left and !root->right){
+            return true;
+        }
+        return hasPathSum(root->left,targetSum-(root->val))+
+        hasPathSum(root->right,targetSum-(root->val));
+    }
     // pre order and post order can be done by just replacing cout up and down
     // level order traversal
     void showLevelOrder(Node* root){
