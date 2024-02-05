@@ -1,13 +1,6 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <iostream>
 #include <bits/stdc++.h>
+#include <string>
 using namespace std;
 
 struct Node{
@@ -56,14 +49,6 @@ class BT{
         cout<<root->data<<endl;
         showTreeInorder(root->right);
     }
-    void pathSum(Node* root, int target){
-        if(root==NULL)return false;
-        if(root->val==targetSum and !root->left and !root->right){
-            return true;
-        }
-        return hasPathSum(root->left,targetSum-(root->val))+
-        hasPathSum(root->right,targetSum-(root->val));
-    }
     // pre order and post order can be done by just replacing cout up and down
     // level order traversal
     void showLevelOrder(Node* root){
@@ -92,7 +77,37 @@ class BT{
             cout<<endl;
         }
     }
+    bool hasPathSum(Node* root, int target){
+        if(root==NULL)return false;
+        if(root->data==target and !root->left and !root->right){
+            return true;
+        }
+        return hasPathSum(root->left,target-(root->data))+hasPathSum(root->right,target-(root->data));
+    }
     
+    void hasPathSumStore(vector<string>& v, string temp, Node* root, int target) {
+        if (root == NULL) return;
+        // Add the current node's data to the path
+        temp += to_string(root->data) + " ";
+    
+        if (root->data == target && !root->left && !root->right) {
+            v.push_back(temp);
+        } 
+        else {
+            // Recursively explore left and right subtrees
+            hasPathSumStore(v, temp, root->left, target - (root->data));
+            hasPathSumStore(v, temp, root->right, target - (root->data));
+        }
+    }
+    
+    void allPaths(Node* head, int target) {
+        vector<string> out;
+        hasPathSumStore(out, "", head, target);
+        cout << "all paths size: " << out.size() << endl;
+        for (int i = 0; i < out.size(); i++) {
+            cout << out[i] << endl;
+        }
+    }
     void invertBinaryTree(Node* root){
      if(!root)return;
      invertBinaryTree(root->left);
@@ -142,7 +157,7 @@ int main()
     BT* obj=new BT();
     Node* root=obj->createRoot(1);
     
-    Node* left1 = obj->createLeft(root, 2);
+    Node* left1 = obj->createLeft(root, 5);
     Node* right1= obj->createRight(root, 3);
     
     Node* left2 = obj->createLeft(left1, 4);
@@ -155,11 +170,13 @@ int main()
     // cout<<"level order -> "<<endl;
     // obj->showLevelOrder(root);
     
-    cout<<"level order -> "<<endl;
+    // cout<<"level order -> "<<endl;
     obj->showLevelOrder(root);
     
-    obj->invertBinaryTree(root);
-    obj->showLevelOrder(root);
+    // obj->invertBinaryTree(root);
+    // obj->showLevelOrder(root);
+    
+    obj->allPaths(root,10);
     
     return 0;
 }
