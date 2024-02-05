@@ -65,16 +65,35 @@ class BT{
         queue<Node*> queue;
         queue.push(root);
         while(!queue.empty()){
-            Node* front=queue.front();
-            cout<<front->data<<endl;
-            queue.pop();
-            if(front->left){
-                queue.push(front->left);
+            
+            int s=queue.size();
+            vector<int> temp;
+            for(int i=0;i<s;i++){
+                Node* front=queue.front();
+                temp.push_back(front->data);
+                queue.pop();
+                if(front->left)
+                    queue.push(front->left);
+                if(front->right)
+                    queue.push(front->right);
             }
-            if(front->right){
-                queue.push(front->right);
+            for(int i=0;i<temp.size();i++)
+            {
+                cout<<temp[i]<<" ";
             }
+            cout<<endl;
         }
+    }
+    
+    void invertBinaryTree(Node* root){
+     if(!root)return;
+     invertBinaryTree(root->left);
+     invertBinaryTree(root->right);
+     if(root){
+         Node* temp=root->left;
+         root->left=root->right;
+         root->right=temp;
+     }
     }
     void showZigZag(Node* root){
         if(root==NULL){
@@ -113,21 +132,26 @@ int main()
 {
     // inorder traversal of a bt
     BT* obj=new BT();
-    Node* root=obj->createRoot(10);
+    Node* root=obj->createRoot(1);
     
-    Node* left1 = obj->createLeft(root, 9);
-    Node* right1= obj->createRight(root, 8);
+    Node* left1 = obj->createLeft(root, 2);
+    Node* right1= obj->createRight(root, 3);
     
-    Node* left2 = obj->createLeft(left1, 9);
-    Node* right2= obj->createRight(left1, 8);
+    Node* left2 = obj->createLeft(left1, 4);
+    Node* right2= obj->createRight(left1, 5);
     
+    Node* left3 = obj->createLeft(right1, 6);
+    Node* right3= obj->createRight(right1, 7);
     
-    obj->showTreeInorder(root);
+    // obj->showTreeInorder(root);
+    // cout<<"level order -> "<<endl;
+    // obj->showLevelOrder(root);
+    
     cout<<"level order -> "<<endl;
     obj->showLevelOrder(root);
     
-    cout<<"level order -> "<<endl;
-    obj->showZigZag(root);
+    obj->invertBinaryTree(root);
+    obj->showLevelOrder(root);
     
     return 0;
 }
