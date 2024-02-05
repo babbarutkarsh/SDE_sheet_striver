@@ -1,12 +1,5 @@
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
 #include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 struct Node{
@@ -55,6 +48,26 @@ class BT{
         cout<<root->data<<endl;
         showTreeInorder(root->right);
     }
+    // pre order and post order can be done by just replacing cout up and down
+    // level order traversal
+    void showLevelOrder(Node* root){
+        if(root==NULL){
+            return;
+        }   
+        queue<Node*> queue;
+        queue.push(root);
+        while(!queue.empty()){
+            Node* front=queue.front();
+            cout<<front->data<<endl;
+            queue.pop();
+            if(front->left){
+                queue.push(front->left);
+            }
+            if(front->right){
+                queue.push(front->right);
+            }
+        }
+    }
 };
 int main()
 {
@@ -70,5 +83,7 @@ int main()
     
     
     obj->showTreeInorder(root);
+    cout<<"level order -> "<<endl;
+    obj->showLevelOrder(root);
     return 0;
 }
