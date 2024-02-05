@@ -1,3 +1,11 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
 #include <iostream>
 #include <bits/stdc++.h>
 using namespace std;
@@ -68,6 +76,38 @@ class BT{
             }
         }
     }
+    void showZigZag(Node* root){
+        if(root==NULL){
+            return;
+        }   
+        queue<Node*> queue;
+        queue.push(root);
+        int level=0;
+        while(!queue.empty()){
+            
+            int s=queue.size();
+            vector<int> temp;
+            for(int i=0;i<s;i++){
+                Node* front=queue.front();
+                temp.push_back(front->data);
+                queue.pop();
+                if(front->left)
+                    queue.push(front->left);
+                if(front->right)
+                    queue.push(front->right);
+            }
+            if(level%2!=0){
+                // if the level is odd then reverse
+                reverse(temp.begin(), temp.end());
+            }
+            for(int i=0;i<temp.size();i++)
+            {
+                cout<<temp[i]<<" ";
+            }
+            level++;
+            cout<<endl;
+        }
+    }
 };
 int main()
 {
@@ -85,5 +125,9 @@ int main()
     obj->showTreeInorder(root);
     cout<<"level order -> "<<endl;
     obj->showLevelOrder(root);
+    
+    cout<<"level order -> "<<endl;
+    obj->showZigZag(root);
+    
     return 0;
 }
