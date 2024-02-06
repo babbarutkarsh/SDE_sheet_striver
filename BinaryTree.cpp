@@ -1,6 +1,13 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
 #include <iostream>
 #include <bits/stdc++.h>
-#include <string>
 using namespace std;
 
 struct Node{
@@ -84,28 +91,155 @@ class BT{
         }
         return hasPathSum(root->left,target-(root->data))+hasPathSum(root->right,target-(root->data));
     }
-    
-    void hasPathSumStore(vector<string>& v, string temp, Node* root, int target) {
-        if (root == NULL) return;
-        // Add the current node's data to the path
-        temp += to_string(root->data) + " ";
-    
-        if (root->data == target && !root->left && !root->right) {
-            v.push_back(temp);
-        } 
-        else {
-            // Recursively explore left and right subtrees
-            hasPathSumStore(v, temp, root->left, target - (root->data));
-            hasPathSumStore(v, temp, root->right, target - (root->data));
+    void identicalBT(Node* one, Node* two){
+        if(one==NULL and two==NULL){
+            return true;
         }
+        if(one->data!=two->data){
+            return false;
+        }
+        return identicalBT(one->left,two->left)+identicalBT(one->right,two->right);
     }
     
-    void allPaths(Node* head, int target) {
-        vector<string> out;
-        hasPathSumStore(out, "", head, target);
-        cout << "all paths size: " << out.size() << endl;
-        for (int i = 0; i < out.size(); i++) {
-            cout << out[i] << endl;
+    bool symmetricalHelper(Node* left, Node* right){
+        if(!left&&!right)
+            return true;
+        if(left->data!=right->data)
+            return false;
+        return symmetricalHelper(left->right,right->left)&&symmetricalHelper(left->left,right->right);
+    }
+    bool symmetricalBT(Node* root){
+        if(!root->left&&!root->right)return true;
+        else if(!root->left || !root->right)return false;
+        return symmetricaHelper(root->left, root->right);
+    }
+    
+    Node* LCAofTwoNodesBST(int one, int two, Node* root){
+        // given a BST find LCA 
+        if(!root)return NULL;
+
+        if(one<root->data && two<root->data){
+            // move left
+            return LCAofTwoNodesBST(one,two,root->left);
+        }
+        else if(one>root->data && two>root->data){
+            return LCAofTwoNodesBST(one,two,root->right);
+        }
+        else{
+            // found
+            return root;
+        }
+        return NULL;
+    }
+    Node* LCAofTwoNodes(Node* one, Node* two, Node* root){
+        // tree is not BST now
+        // search node in left and right halves if you get both return Node
+        if(!root)return NULL;
+        
+        if(root==one||root==two)return root;
+        
+        Node* left=search(one,two,root->left);
+        Node* right=search(one,two,root->right);
+        
+        if(left&&right)return root;
+        
+        return left?left:right;
+    }
+    void sumRootToLeafBT(Node* root, int temp, int& sumTotal){
+        //              1
+        //          2       3
+        //      4    5
+        //    6
+        // sum= 1246+125+13
+        if(!root)return;
+        if(!root->right&&!root->left){
+            sumTotal+=temp;
+            return;
+        }
+        temp=temp*10+root->data;
+        sumRootToLeafBT(root->left);
+        sumRootToLeafBT(root->right);
+        return;
+    }
+    bool twoSumBT(int target, Node* root){
+        
+    }
+    int maxDepth(Node* root){
+        if(root==NULL){
+            return 0;
+        }
+        return 1+max(maxDepth(root->left),maxDepth(root->right));
+    }
+    int minDepth(Node* root){
+        if(root==NULL){
+            return 0;
+        }
+        int left=minDepth(root->left);
+        int right=minDepth(root->right);
+        
+        if(left==0||right==0)return max(left,right);
+        
+        return 1+min(minDepth(root->left),minDepth(root->right));
+    }
+    int findGreatestIndex(vector<int> v, int l, int h){
+        int mx=INT_MIN;int ind=INT_MIN;
+        for(int i=l;i<h;i++){
+            if(v[i]>mx){
+                mx=v[i];
+                ind=i;
+            }
+        }
+        return ind;
+    }
+    Node* BTfromInorder(vector<int> v, int l, int h){
+       if(l>h)return NULL;        
+       int i=findGreatestIndex(v,l,h);
+       Node* root=new Node(v[i]);
+       
+       root->left=BTfromInorder(v,0,i-1);
+       root->right=BTfromInorder(v,i+1,h);
+       
+        return h;
+    }
+    Node* sortedArrayToBST(vector<int> v, int l,int h){
+        
+        int mid=(l+h)/2;
+        Node* root=new Node(v[mid]);
+        root->left=sortedArrayToBST(v,m+1,h);
+        root->right=sortedArrayToBST(v,l,m-1);
+        
+        return root;
+    }
+    // medium to hard
+    Node* BTfromInorderAndPostorder(){
+        
+    }
+    Node* kthSmallestinBST(){
+        
+    }
+    void BTtoLL(){
+        
+    }
+    Node* recoverBST(){
+        
+    }
+    void hasPathSumStore(vector<string>& v, string temp, Node* root, int target){
+        if(root==NULL)return;
+        temp+=to_string(root->data)+" ";
+        if(root->data==target and !root->left and !root->right){
+            v.push_back(temp);
+        }
+        else{
+            hasPathSumStore(v,temp,root->left,target-(root->data));
+            hasPathSumStore(v,temp,root->right,target-(root->data));
+        }
+    }
+    void allPaths(Node* head, int target){
+        vector<string> out={};
+        hasPathSumStore(out,"",head,target);
+        
+        for(int i=0;i<out.size();i++){
+            cout<<out[i]<<endl;
         }
     }
     void invertBinaryTree(Node* root){
