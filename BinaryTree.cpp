@@ -216,17 +216,71 @@ class BT{
         return root;
     }
     // medium to hard
-    Node* BTfromInorderAndPostorder(){
-        
+    void flattenTreeToLL(TreeNode* root) {
+        if(!root)return;
+
+        flatten(root->left);
+        flatten(root->right);
+
+        if(root->left){
+            TreeNode* temp=root->right;
+            root->right=root->left;
+            root->left=NULL;
+            while(root->right){
+                root=root->right;
+            }
+            root->right=temp;
+            root->left=NULL;
+        }
     }
-    Node* kthSmallestinBST(){
-        
+    
+    
+    void kthSmallesthelper(TreeNode* root,int& k, int &out)
+    {
+        if(root==NULL)
+            return;
+        kthSmallesthelper(root->left,k,out);
+        k--;
+        if(k==0)out=root->val;
+        kthSmallesthelper(root->right,k,out);
     }
-    void BTtoLL(){
-        
+    int kthSmallest(TreeNode* root, int k) {
+        int out=-1;
+        kthSmallesthelper(root,k,out);
+        return out;
     }
-    Node* recoverBST(){
-        
+    
+//        1
+//     /   \
+//   2     3 
+
+// Input: 
+// in[]   = {4, 8, 2, 5, 1, 6, 3, 7}
+// post[] = {8, 4, 5, 2, 6, 7, 3, 1} 
+
+// Output: Root of below tree
+
+//             1
+//         /     \
+//      2        3
+//   /    \    /   \
+// 4     5   6      7
+//   \
+//   8
+// approach correct
+    Node* BTfromInorderAndPostorder(vector<int> in, vector<int> post,int l, int h, int k){
+        if(l>h)return NULL;
+        int indInInorder=-1;
+        int temp=k;
+        while(indInInorder==-1)
+            indInInorder=findIndex(temp--);
+        Node* root=new Node(post[temp]);
+        root->left=BTfromInorderAndPostorder(in,post,root,l,indInInorder-1,k)
+        root->right=BTfromInorderAndPostorder(in,post,root,indInInorder+1,h,k)
+        return root;
+    }
+    Node* recoverBST(Node* root){
+       
     }
     void hasPathSumStore(vector<string>& v, string temp, Node* root, int target){
         if(root==NULL)return;
