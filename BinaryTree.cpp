@@ -161,8 +161,13 @@ class BT{
         sumRootToLeafBT(root->right);
         return;
     }
-    bool twoSumBT(int target, Node* root){
-        
+    bool twoSumBT(int target, Node* root,unordered_map<int,bool> mp){
+        if(!root)return;
+        if(mp[k-root->val]==true)
+            out=true;
+        mp[root->val]=true;
+        helper(root->left,k);
+        helper(root->right,k);
     }
     int maxDepth(Node* root){
         if(root==NULL){
